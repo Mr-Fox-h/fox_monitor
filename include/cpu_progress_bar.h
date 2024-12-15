@@ -27,5 +27,14 @@ void print_progress_bar(double percentage) {
     printf(" ");
   }
   reset_color();
-  printf(" %.2f%%\n", percentage);
+  printf(" ");
+  if (percentage <= 40.00)
+    green();
+  else if (percentage <= 60.00 && percentage >= 40.00)
+    yellow();
+  else
+    red();
+
+  printf("%.2f%%\n", percentage);
+  reset_color();
 }

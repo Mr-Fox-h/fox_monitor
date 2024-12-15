@@ -23,6 +23,7 @@ void cpu_monitoring(char cpus[][256]) {
 
   fclose(file);
 }
+
 void parse_cpu_stats(const char *cpu_line, unsigned long long *user,
                      unsigned long long *nice, unsigned long long *system,
                      unsigned long long *idle, unsigned long long *iowait,

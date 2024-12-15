@@ -1,12 +1,13 @@
 #include "include/cpu_monitor.h"
 #include "include/cpu_progress_bar.h"
+#include "include/mem_monitor.h"
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
 
 int main(int argc, char *argv[]) {
-  // CPU Monitoring
+  // CPU Monitoring Data
   char cpus[MAX_CPUS][256] = {{0}};
   unsigned long long user1[MAX_CPUS], nice1[MAX_CPUS], system1[MAX_CPUS],
       idle1[MAX_CPUS], iowait1[MAX_CPUS], irq1[MAX_CPUS], softirq1[MAX_CPUS],
@@ -15,7 +16,11 @@ int main(int argc, char *argv[]) {
       idle2[MAX_CPUS], iowait2[MAX_CPUS], irq2[MAX_CPUS], softirq2[MAX_CPUS],
       steal2[MAX_CPUS], guest2[MAX_CPUS], guest_nice2[MAX_CPUS];
 
+  // Mem Monitoring Data
+  char mems[MAX_MEM][256];
+
   while (true) {
+    // CPU Monitoring Loop
     cpu_monitoring(cpus);
     for (int i = 0; i < MAX_CPUS && cpus[i][0] != '\0'; i++) {
       parse_cpu_stats(cpus[i], &user1[i], &nice1[i], &system1[i], &idle1[i],
@@ -23,7 +28,7 @@ int main(int argc, char *argv[]) {
                       &guest1[i], &guest_nice1[i]);
     }
 
-    sleep(1);
+    usleep(500000);
     cpu_monitoring(cpus);
     for (int i = 0; i < MAX_CPUS && cpus[i][0] != '\0'; i++) {
       parse_cpu_stats(cpus[i], &user2[i], &nice2[i], &system2[i], &idle2[i],
@@ -45,6 +50,12 @@ int main(int argc, char *argv[]) {
         printf("CPUs:\t");
         print_progress_bar(usage);
       }
+    }
+
+    // Mem Monitoring Loop
+    mem_monitoring(mems);
+    for (int i = 0; i < MAX_MEM && mems[i][0] != '\0'; i++) {
+      printf("%s", mems[i]);
     }
   }
   return EXIT_SUCCESS;

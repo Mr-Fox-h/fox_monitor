@@ -16,14 +16,12 @@ void print_progress_bar(double percentage) {
   for (int i = 0; i < filled_length; i++) {
     if (i <= 15) {
       green();
-      printf("󰹞");
     } else if (i >= 15 && i <= 30) {
       yellow();
-      printf("󰹞");
     } else {
       red();
-      printf("󰹞");
     }
+    printf("󰹞");
   }
   for (int i = filled_length; i < bar_width; i++) {
     printf(" ");

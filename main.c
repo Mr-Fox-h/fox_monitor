@@ -38,8 +38,13 @@ int main(int argc, char *argv[]) {
           softirq1[i], steal1[i], guest1[i], guest_nice1[i], user2[i], nice2[i],
           system2[i], idle2[i], iowait2[i], irq2[i], softirq2[i], steal2[i],
           guest2[i], guest_nice2[i]);
-      printf("CPU%d:\t", i);
-      print_progress_bar(usage);
+      if (i != 0) {
+        printf("CPU%d:\t", i - 1);
+        print_progress_bar(usage);
+      } else {
+        printf("CPUs:\t");
+        print_progress_bar(usage);
+      }
     }
   }
   return EXIT_SUCCESS;

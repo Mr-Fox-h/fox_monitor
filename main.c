@@ -18,6 +18,9 @@ int main(int argc, char *argv[]) {
 
   // Mem Monitoring Data
   char mems[MAX_MEM][256];
+  char cached[256];
+  char swap_cached[256];
+  unsigned long long mems_status[MAX_MEM], cached_status[MAX_MEM];
 
   while (true) {
     // CPU Monitoring Loop
@@ -50,12 +53,14 @@ int main(int argc, char *argv[]) {
         printf("CPUs:\t");
         print_progress_bar(usage);
       }
-    }
 
-    // Mem Monitoring Loop
-    mem_monitoring(mems);
-    for (int i = 0; i < MAX_MEM && mems[i][0] != '\0'; i++) {
-      printf("%s", mems[i]);
+      // Mem Monitoring Loop
+      mem_monitoring(mems, cached, swap_cached);
+      for (int i = 0; i < MAX_MEM && mems[i][0] != '\0'; i++) {
+        parse_meme_stats(mems[i], &mems_status[i]);
+      }
+
+      parse_cached_stats(cached, cached_status);
     }
   }
   return EXIT_SUCCESS;

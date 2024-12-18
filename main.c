@@ -22,6 +22,12 @@ int main(int argc, char *argv[]) {
   char swap[MAX_MEM][256];
   unsigned long long mems_status[MAX_MEM], cached_status[MAX_MEM],
       swap_status[MAX_MEM];
+  unsigned long long mem_total = 0;
+  unsigned long long mem_free = 0;
+  unsigned long long mem_available = 0;
+  unsigned long long cached_value = 0;
+  unsigned long long swap_total = 0;
+  unsigned long long swap_free = 0;
 
   while (true) {
     // CPU Monitoring Loop
@@ -55,10 +61,12 @@ int main(int argc, char *argv[]) {
         print_progress_bar(usage);
       }
     }
-    // Mem Monitoring Loop
+
+    // Mem Monitoring Loearp
     mem_monitoring(mems, cached, swap);
     for (int i = 0; i < MAX_MEM && mems[i][0] != '\0'; i++) {
       parse_meme_stats(mems[i], &mems_status[i]);
+      /*printf("%s", mems[i]);*/
     }
 
     for (int i = 0; i < MAX_MEM && swap[i][0] != '\0'; i++) {
@@ -66,6 +74,12 @@ int main(int argc, char *argv[]) {
     }
 
     parse_cached_stats(cached, cached_status);
+
+    // Calculate memory usage percentages
+    double mem_usage = calculate_mem_usage(mem_total, mem_free, mem_available);
+    double mem_available_usage =
+        calculate_mem_available_usage(mem_total, mem_available);
+    double swap_usage = 100.0 * (double)(swap_total - swap_free) / swap_total;
   }
   return EXIT_SUCCESS;
 }

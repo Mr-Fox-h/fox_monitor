@@ -44,4 +44,15 @@ void parse_swap_stats(const char *swap_line, unsigned long long *swap_status) {
   sscanf(swap_line, "%*s %llu", swap_status);
 }
 
-void calculate_cpu_usage(unsigned long long mems_status) {}
+double calculate_mem_usage(unsigned long long mem_total,
+                           unsigned long long mem_free,
+                           unsigned long long mem_available) {
+  unsigned long long mem_used = mem_total - mem_free;
+  return 100.0 * (double)mem_used / mem_total;
+}
+
+double calculate_mem_available_usage(unsigned long long mem_total,
+                                     unsigned long long mem_available) {
+  unsigned long long mem_used = mem_total - mem_available;
+  return 100.0 * (double)mem_used / mem_total;
+}

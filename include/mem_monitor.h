@@ -3,8 +3,7 @@
 
 #define MAX_MEM 128
 
-void mem_monitoring(char mems[][256], char chached[256],
-                    char swap_cached[256]) {
+void mem_monitoring(char mems[][256], char chached[256], char swap[][256]) {
   char buffer[256];
   int mem_count = 0;
 
@@ -24,7 +23,8 @@ void mem_monitoring(char mems[][256], char chached[256],
     }
 
     if (strncmp(buffer, "Swap ", 4) == 0) {
-      strncpy(swap_cached, buffer, 256);
+      strncpy(swap[mem_count], buffer, 256);
+      mem_count++;
     }
   }
 
@@ -39,3 +39,9 @@ void parse_cached_stats(const char *cached_line,
                         unsigned long long *cached_status) {
   sscanf(cached_line, "%*s %llu", cached_status);
 }
+
+void parse_swap_stats(const char *swap_line, unsigned long long *swap_status) {
+  sscanf(swap_line, "%*s %llu", swap_status);
+}
+
+void calculate_cpu_usage(unsigned long long mems_status) {}

@@ -1,6 +1,7 @@
 #include "include/cpu_monitor.h"
 #include "include/cpu_progress_bar.h"
 #include "include/mem_monitor.h"
+#include "include/mem_progress_bar.h"
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -55,10 +56,10 @@ int main(int argc, char *argv[]) {
           guest2[i], guest_nice2[i]);
       if (i != 0) {
         printf("CPU%d:\t", i - 1);
-        print_progress_bar(usage);
+        cpu_progress_bar(usage);
       } else {
         printf("CPUs:\t");
-        print_progress_bar(usage);
+        cpu_progress_bar(usage);
       }
     }
 
@@ -66,7 +67,8 @@ int main(int argc, char *argv[]) {
     mem_monitoring(mems, cached, swap);
     for (int i = 0; i < MAX_MEM && mems[i][0] != '\0'; i++) {
       parse_meme_stats(mems[i], &mems_status[i]);
-      /*printf("%s", mems[i]);*/
+      printf("%s", mems[i]);
+      printf("%lld\n", mems_status[i]);
     }
 
     for (int i = 0; i < MAX_MEM && swap[i][0] != '\0'; i++) {

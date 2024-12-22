@@ -1,10 +1,10 @@
 #include "colors.h"
 #include <stdio.h>
 
-#ifndef CPU_PROGRESS_BAR_H
-#define CPU_PROGRESS_BAR_H
+#ifndef MEM_PROGRESS_BAR_H
+#define MEM_PROGRESS_BAR_H
 
-void cpu_progress_bar(double percentage) {
+void mem_progress_bar(double percentage) {
   int bar_width = 50;
   int filled_length = (int)(percentage / 100.0 * bar_width);
 

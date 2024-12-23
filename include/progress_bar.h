@@ -1,10 +1,7 @@
 #include "colors.h"
 #include <stdio.h>
 
-#ifndef MEM_PROGRESS_BAR_H
-#define MEM_PROGRESS_BAR_H
-
-void mem_progress_bar(double percentage) {
+void status_progress_bar(double percentage) {
   int bar_width = 50;
   int filled_length = (int)(percentage / 100.0 * bar_width);
 
@@ -34,5 +31,3 @@ void mem_progress_bar(double percentage) {
   printf("%.2f%%\n", percentage);
   reset_color();
 }
-
-#endif

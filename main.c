@@ -1,7 +1,6 @@
 #include "include/cpu_monitor.h"
-#include "include/cpu_progress_bar.h"
 #include "include/mem_monitor.h"
-#include "include/mem_progress_bar.h"
+#include "include/progress_bar.h"
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -56,10 +55,10 @@ int main(int argc, char *argv[]) {
           guest2[i], guest_nice2[i]);
       if (i != 0) {
         printf("CPU%d:\t", i - 1);
-        cpu_progress_bar(usage);
+        status_progress_bar(usage);
       } else {
         printf("CPUs:\t");
-        cpu_progress_bar(usage);
+        status_progress_bar(usage);
       }
     }
 
@@ -67,8 +66,9 @@ int main(int argc, char *argv[]) {
     mem_monitoring(mems, cached, swap);
     for (int i = 0; i < MAX_MEM && mems[i][0] != '\0'; i++) {
       parse_meme_stats(mems[i], &mems_status[i]);
-      printf("%s", mems[i]);
-      printf("%lld\n", mems_status[i]);
+      mem_total = mems_status[0];
+      mem_free = mems_status[1];
+      mem_available = mems_status[2];
     }
 
     for (int i = 0; i < MAX_MEM && swap[i][0] != '\0'; i++) {
@@ -82,6 +82,17 @@ int main(int argc, char *argv[]) {
     double mem_available_usage =
         calculate_mem_available_usage(mem_total, mem_available);
     double swap_usage = 100.0 * (double)(swap_total - swap_free) / swap_total;
+    printf(
+        ""
+        ""
+        ""
+        ""
+        "\n");
+    printf("Memory: %lld\n", mem_total);
+    printf("Used:\t");
+    status_progress_bar(mem_usage);
+    printf("AvaU:\t");
+    status_progress_bar(mem_available_usage);
   }
   return EXIT_SUCCESS;
 }

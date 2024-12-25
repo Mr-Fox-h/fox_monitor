@@ -1,7 +1,8 @@
 #include "colors.h"
+#include <stdbool.h>
 #include <stdio.h>
 
-void status_progress_bar(double percentage) {
+void status_progress_bar(double percentage, bool per) {
   int bar_width = 50;
   int filled_length = (int)(percentage / 100.0 * bar_width);
 
@@ -28,6 +29,9 @@ void status_progress_bar(double percentage) {
   else
     red();
 
-  printf("%.2f%%\n", percentage);
+  if (per)
+    printf("%.2f%%\n", percentage);
+  else
+    printf("%.2f GB\n", percentage);
   reset_color();
 }

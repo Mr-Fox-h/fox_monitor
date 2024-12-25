@@ -24,6 +24,7 @@ void mem_monitoring(char mems[][256], char chached[256], char swap[][256]) {
 
     if (strncmp(buffer, "Swap ", 4) == 0) {
       strncpy(swap[mem_count], buffer, 256);
+      printf("%s", swap[mem_count]);
       mem_count++;
     }
   }

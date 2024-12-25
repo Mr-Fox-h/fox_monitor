@@ -25,7 +25,7 @@ int main(int argc, char *argv[]) {
   unsigned long long mem_total = 0;
   unsigned long long mem_free = 0;
   unsigned long long mem_available = 0;
-  unsigned long long cached_value = 0;
+  float cached_value = 0;
   unsigned long long swap_total = 0;
   unsigned long long swap_free = 0;
 
@@ -55,10 +55,10 @@ int main(int argc, char *argv[]) {
           guest2[i], guest_nice2[i]);
       if (i != 0) {
         printf("CPU%d:\t", i - 1);
-        status_progress_bar(usage);
+        status_progress_bar(usage, true);
       } else {
         printf("CPUs:\t");
-        status_progress_bar(usage);
+        status_progress_bar(usage, true);
       }
     }
 
@@ -76,6 +76,7 @@ int main(int argc, char *argv[]) {
     }
 
     parse_cached_stats(cached, cached_status);
+    cached_value = (double)(*cached_status / 1024.0) / 1024.0;
 
     // Calculate memory usage percentages
     double mem_usage = calculate_mem_usage(mem_total, mem_free, mem_available);
@@ -88,11 +89,13 @@ int main(int argc, char *argv[]) {
         ""
         ""
         "\n");
-    printf("Memory: %lld\n", mem_total);
+    printf("Memory: %lld KB\n", mem_total);
     printf("Used:\t");
-    status_progress_bar(mem_usage);
-    printf("AvaU:\t");
-    status_progress_bar(mem_available_usage);
+    status_progress_bar(mem_usage, true);
+    printf("Avai:\t");
+    status_progress_bar(mem_available_usage, true);
+    printf("Cached:\t");
+    status_progress_bar(cached_value, false);
   }
   return EXIT_SUCCESS;
 }

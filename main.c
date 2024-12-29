@@ -1,5 +1,6 @@
 #include "include/cpu_monitor.h"
 #include "include/mem_monitor.h"
+#include "include/net_monitor.h"
 #include "include/progress_bar.h"
 #include <stdbool.h>
 #include <stdio.h>
@@ -16,7 +17,7 @@ int main(int argc, char *argv[]) {
       idle2[MAX_CPUS], iowait2[MAX_CPUS], irq2[MAX_CPUS], softirq2[MAX_CPUS],
       steal2[MAX_CPUS], guest2[MAX_CPUS], guest_nice2[MAX_CPUS];
 
-  // Mem Monitoring Data
+  // Memory Monitoring Data
   char mems[MAX_MEM][256];
   char cached[256];
   char swap[MAX_MEM][256];
@@ -29,6 +30,14 @@ int main(int argc, char *argv[]) {
   unsigned long long swap_total = 0;
   unsigned long long swap_free = 0;
   unsigned long long swap_cached = 0;
+
+  // Network Monitoring
+  char interfaces[MAX_INTERFACES][256];
+  char interface_name1[MAX_INTERFACES][256];
+  char interface_name2[MAX_INTERFACES][256];
+  unsigned long long rx_bytes1[MAX_INTERFACES], tx_bytes1[MAX_INTERFACES];
+  unsigned long long rx_bytes2[MAX_INTERFACES], tx_bytes2[MAX_INTERFACES];
+  double interval = 1.0; // Interval in seconds
 
   while (true) {
     // CPU Monitoring Loop
@@ -47,6 +56,7 @@ int main(int argc, char *argv[]) {
                       &guest2[i], &guest_nice2[i]);
     }
 
+    // Calculate CPU Usage Percentages
     system("clear");
     for (int i = 0; i < MAX_CPUS && cpus[i][0] != '\0'; i++) {
       double usage = calculate_cpu_usage(
@@ -63,7 +73,7 @@ int main(int argc, char *argv[]) {
       }
     }
 
-    // Mem Monitoring Loearp
+    // Mem Monitoring Loop
     mem_monitoring(mems, cached, swap);
     for (int i = 0; i < MAX_MEM && mems[i][0] != '\0'; i++) {
       parse_meme_stats(mems[i], &mems_status[i]);
@@ -109,6 +119,26 @@ int main(int argc, char *argv[]) {
     printf("Swap: %lld KB\n", swap_total);
     printf("Used:\t");
     status_progress_bar(swap_usage, true);
+
+    // Mem Monitoring Loop
+    net_monitoring(interfaces);
+    for (int i = 0; i < MAX_INTERFACES && interfaces[i][0] != '\0'; i++) {
+      parse_net_stats(interfaces[i], interface_name1[i], &rx_bytes1[i],
+                      &tx_bytes1[i]);
+    }
+
+    net_monitoring(interfaces);
+    for (int i = 0; i < MAX_INTERFACES && interfaces[i][0] != '\0'; i++) {
+      parse_net_stats(interfaces[i], interface_name2[i], &rx_bytes2[i],
+                      &tx_bytes2[i]);
+    }
+    // Calculate Network Usage Percentages
+    for (int i = 0; i < MAX_INTERFACES && interfaces[i][0] != '\0'; i++) {
+      double usage = calculate_net_usage(rx_bytes1[i], tx_bytes1[i],
+                                         rx_bytes2[i], tx_bytes2[i], interval);
+      printf("Interface: %s\n", interface_name2[i]);
+      printf("Network Usage: %.2f Mbps\n", usage);
+    }
   }
   return EXIT_SUCCESS;
 }

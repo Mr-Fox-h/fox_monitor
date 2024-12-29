@@ -6,6 +6,7 @@
 void mem_monitoring(char mems[][256], char chached[256], char swap[][256]) {
   char buffer[256];
   int mem_count = 0;
+  int swap_count = 0;
 
   FILE *file = fopen("/proc/meminfo", "r");
   if (file == NULL) {
@@ -23,9 +24,8 @@ void mem_monitoring(char mems[][256], char chached[256], char swap[][256]) {
     }
 
     if (strncmp(buffer, "Swap ", 4) == 0) {
-      strncpy(swap[mem_count], buffer, 256);
-      printf("%s", swap[mem_count]);
-      mem_count++;
+      strncpy(swap[swap_count], buffer, 256);
+      swap_count++;
     }
   }
 

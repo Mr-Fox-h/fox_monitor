@@ -28,6 +28,7 @@ int main(int argc, char *argv[]) {
   float cached_value = 0;
   unsigned long long swap_total = 0;
   unsigned long long swap_free = 0;
+  unsigned long long swap_cached = 0;
 
   while (true) {
     // CPU Monitoring Loop
@@ -73,6 +74,9 @@ int main(int argc, char *argv[]) {
 
     for (int i = 0; i < MAX_MEM && swap[i][0] != '\0'; i++) {
       parse_swap_stats(swap[i], &swap_status[i]);
+      swap_cached = swap_status[0];
+      swap_total = swap_status[1];
+      swap_free = swap_status[2];
     }
 
     parse_cached_stats(cached, cached_status);
@@ -96,6 +100,15 @@ int main(int argc, char *argv[]) {
     status_progress_bar(mem_available_usage, true);
     printf("Cached:\t");
     status_progress_bar(cached_value, false);
+    printf(
+        ""
+        ""
+        ""
+        ""
+        "\n");
+    printf("Swap: %lld KB\n", swap_total);
+    printf("Used:\t");
+    status_progress_bar(swap_usage, false);
   }
   return EXIT_SUCCESS;
 }

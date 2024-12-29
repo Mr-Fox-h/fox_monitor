@@ -30,7 +30,7 @@ Fox Monitor is a simple system monitor CLI tool made in C. It provides real-time
 ## Todo
 
 - [x] CPU Usage Status
-- [ ] Memory Usage Status
+- [x] Memory Usage Status
+- [x] Swap Usage Status
 - [ ] Disk Usage Status
 - [ ] Network Activity Status
-- [ ] Process Management

@@ -108,7 +108,7 @@ int main(int argc, char *argv[]) {
         "\n");
     printf("Swap: %lld KB\n", swap_total);
     printf("Used:\t");
-    status_progress_bar(swap_usage, false);
+    status_progress_bar(swap_usage, true);
   }
   return EXIT_SUCCESS;
 }
